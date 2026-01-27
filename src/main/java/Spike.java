@@ -12,19 +12,30 @@ public class Spike {
         Scanner in = new Scanner(System.in);
         String line;
 
+        // Storing of tasks
+        String[] tasks = new String[100];
+        int taskCount = 0;
+
         // Echo function
         boolean isExit = false;
         while (!isExit) {
-            line = in.nextLine();
+            line = in.nextLine().trim();
+
             System.out.println("  " + HORIZONTAL_LINE);
 
             if (line.equals("bye")) {
-              System.out.println("  " + "Bye. Hope to see you again soon!");
-              isExit = true;
+                System.out.println("  " + "Bye. Hope to see you again soon!");
+                isExit = true;
+            } else if (line.equals("list")) {
+                for (int i = 0; i < taskCount; i++) {
+                    System.out.println("   " + (i + 1) + ". " + tasks[i]);
+                }
             } else {
-                System.out.println("  " + line);
+                tasks[taskCount] = line;
+                taskCount++;
+                System.out.println("  added: " + line);
             }
-            
+
             System.out.println("  " + HORIZONTAL_LINE);
         }
     }
