@@ -9,7 +9,7 @@ public class Task {
 
     public String getStatusIcon() {
         if (!isDone) {
-            return("");
+            return(" ");
         }
         return("X");
     }
@@ -22,6 +22,7 @@ public class Task {
         this.isDone = false;
     }
 
+    @Override
     public String toString() {
         return("[" + getStatusIcon() + "] " + description);
     }
