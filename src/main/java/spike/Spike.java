@@ -1,3 +1,5 @@
+package spike;
+
 import java.util.Scanner;
 
 public class Spike {
@@ -43,7 +45,7 @@ public class Spike {
             } catch (NumberFormatException e) {
                 System.out.println("   Enter a valid number pleaasssse!");
             } catch (IndexOutOfBoundsException e) {
-                System.out.println("   Task number does not exist");
+                System.out.println("   spike.Task number does not exist");
             }
 
             printLine();
@@ -55,7 +57,7 @@ public class Spike {
         int toIndex = line.indexOf("/to");
 
         if (fromIndex == -1 || toIndex == -1) {
-            throw new SpikeException("Event format is invalid. Use: event <desc> /from <time> /to <time>");
+            throw new SpikeException("spike.Event format is invalid. Use: event <desc> /from <time> /to <time>");
         }
 
         String description = line.substring(5, fromIndex).trim();
@@ -76,7 +78,7 @@ public class Spike {
         int byIndex = line.indexOf("/by");
 
         if (byIndex == -1) {
-            throw new SpikeException("Deadline format is invalid. Use: deadline <desc> /by <time>");
+            throw new SpikeException("spike.Deadline format is invalid. Use: deadline <desc> /by <time>");
         }
 
         String description = line.substring(8, byIndex).trim();
@@ -158,7 +160,7 @@ public class Spike {
 
     private static void greetUser() {
         System.out.println(HORIZONTAL_LINE);
-        System.out.println("Hello! I'm Spike!");
+        System.out.println("Hello! I'm spike.Spike!");
         System.out.println("What can I do for you?");
         System.out.println(HORIZONTAL_LINE);
     }
