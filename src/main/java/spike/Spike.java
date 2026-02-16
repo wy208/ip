@@ -1,12 +1,12 @@
 package spike;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Spike {
-    private static final String HORIZONTAL_LINE = "---------------------------------------------------";
-    private static final int MAX_TASKS = 100;
-    private static final Task[] tasks = new Task[MAX_TASKS];
-    private static int taskCount = 0;
+    private static final String HORIZONTAL_LINE = "----------------------------------------------------";
+
+    private static final ArrayList<Task> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
         greetUser();
@@ -37,18 +37,43 @@ public class Spike {
                     addDeadline(line);
                 } else if (line.startsWith("event")) {
                     addEvent(line);
+                } else if (line.startsWith("delete")) {
+                    deleteTask(line);
                 } else {
-                    throw new SpikeException("i don't understandd!?");
+                    throw new SpikeException("i don't understand!?");
                 }
             } catch (SpikeException e) {
                 System.out.println("   OH NO!! " + e.getMessage());
             } catch (NumberFormatException e) {
-                System.out.println("   Enter a valid number pleaasssse!");
+                System.out.println("   Enter a valid number please!");
             } catch (IndexOutOfBoundsException e) {
-                System.out.println("   spike.Task number does not exist");
+                System.out.println("   Task number does not exist.");
             }
 
             printLine();
+        }
+    }
+
+    private static void deleteTask(String line) throws SpikeException {
+        try {
+            String[] parts = line.split(" ");
+            if (parts.length < 2) {
+                throw new SpikeException("Please specify task number to delete.");
+            }
+
+            int index = Integer.parseInt(parts[1]) - 1;
+
+            if (index < 0 || index >= tasks.size()) {
+                throw new SpikeException("Task number does not exist");
+            }
+
+            Task removedTask = tasks.remove(index);
+
+            System.out.println("   Noted. I've removed this task.");
+            System.out.println("   " + removedTask);
+            System.out.println("   Now you have " + tasks.size() + " tasks in the list.");
+        } catch (NumberFormatException e) {
+            throw new SpikeException("Please enter a valid number to delete.");
         }
     }
 
@@ -57,7 +82,7 @@ public class Spike {
         int toIndex = line.indexOf("/to");
 
         if (fromIndex == -1 || toIndex == -1) {
-            throw new SpikeException("spike.Event format is invalid. Use: event <desc> /from <time> /to <time>");
+            throw new SpikeException("Event format invalid! Format: event <desc> /from <time> /to <time>");
         }
 
         String description = line.substring(5, fromIndex).trim();
@@ -68,17 +93,17 @@ public class Spike {
             throw new SpikeException("The description of an event cannot be empty.");
         }
 
-        tasks[taskCount] = new Event(description, from, to);
-        taskCount++;
+        Task newTask = new Event(description, from, to);
+        tasks.add(newTask);
 
-        printTaskWithTaskCount();
+        printTaskWithTaskCount(newTask);
     }
 
     private static void addDeadline(String line) throws SpikeException {
         int byIndex = line.indexOf("/by");
 
         if (byIndex == -1) {
-            throw new SpikeException("spike.Deadline format is invalid. Use: deadline <desc> /by <time>");
+            throw new SpikeException("Deadline format is invalid! Format: deadline <desc> /by <time>");
         }
 
         String description = line.substring(8, byIndex).trim();
@@ -88,59 +113,59 @@ public class Spike {
             throw new SpikeException("The description of a deadline cannot be empty.");
         }
 
-        tasks[taskCount] = new Deadline(description, by);
-        taskCount++;
+        Task newTask = new Deadline(description, by);
+        tasks.add(newTask);
 
-        printTaskWithTaskCount();
+        printTaskWithTaskCount(newTask);
     }
 
     private static void addTodo(String line) throws SpikeException {
-        if (line.length() <= 4) {
-            throw new SpikeException("The description of a todo cannot be empty.");
-        }
         String description = line.substring(4).trim();
         if (description.isEmpty()) {
             throw new SpikeException("The description of a todo cannot be empty.");
         }
 
-        tasks[taskCount] = new Todo(description);
-        taskCount++;
+        Task newTask = new Todo(description);
+        tasks.add(newTask);
 
-        printTaskWithTaskCount();
+        printTaskWithTaskCount(newTask);
     }
 
     private static void unmarkTask(String line) throws SpikeException {
         String[] parts = line.split(" ");
         int index = Integer.parseInt(parts[1]) - 1;
 
-        if (tasks[index] == null) {
+        if (index < 0 || index >= tasks.size()) {
             throw new SpikeException("That task does not exist.");
         }
 
-        tasks[index].markAsNotDone();
+        tasks.get(index).markAsNotDone();
 
         System.out.println("   OK, I've marked this task as not done yet:");
-        System.out.println("   " + tasks[index]);
+        System.out.println("   " + tasks.get(index));
     }
 
     private static void markTask(String line) throws SpikeException {
         String[] parts = line.split(" ");
         int index = Integer.parseInt(parts[1]) - 1;
 
-        if (tasks[index] == null) {
+        if (index < 0 || index >= tasks.size()) {
             throw new SpikeException("That task does not exist.");
         }
 
-        tasks[index].markAsDone();
+        tasks.get(index).markAsDone();
 
         System.out.println("   Nice! I've marked this task as done:");
-        System.out.println("   " + tasks[index]);
+        System.out.println("   " + tasks.get(index));
     }
 
     private static void listTasks() {
         System.out.println("   Here are the tasks in your list: ");
-        for (int i = 0; i < taskCount; i++) {
-            System.out.println("   " + (i + 1) + ". " + tasks[i]);
+
+        int count = 1;
+        for (Task t: tasks) {
+            System.out.println("   " + count + "." + t);
+            count++;
         }
     }
 
@@ -152,15 +177,15 @@ public class Spike {
         System.out.println("  " + HORIZONTAL_LINE);
     }
 
-    private static void printTaskWithTaskCount() {
+    private static void printTaskWithTaskCount(Task task) {
         System.out.println("   Got it. I've added this task:");
-        System.out.println("   " + tasks[taskCount - 1]);
-        System.out.println("   Now you have " + taskCount + " tasks in the list");
+        System.out.println("   " + task);
+        System.out.println("   Now you have " + tasks.size() + " tasks in the list");
     }
 
     private static void greetUser() {
         System.out.println(HORIZONTAL_LINE);
-        System.out.println("Hello! I'm spike.Spike!");
+        System.out.println("Hello! I'm Spike!");
         System.out.println("What can I do for you?");
         System.out.println(HORIZONTAL_LINE);
     }
