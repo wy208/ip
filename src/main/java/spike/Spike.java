@@ -2,6 +2,9 @@ package spike;
 
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Spike {
     private static final String HORIZONTAL_LINE = "----------------------------------------------------";
@@ -9,6 +12,8 @@ public class Spike {
     private static final ArrayList<Task> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
+        loadTaskFromFile();
+
         greetUser();
 
         Scanner in = new Scanner(System.in);
@@ -77,6 +82,72 @@ public class Spike {
         }
     }
 
+    private static void loadTaskFromFile() {
+        try {
+            File file = new File("./data/spike.txt");
+            if (!file.exists()) {
+                return;
+            }
+
+            Scanner fileScanner = new Scanner(file);
+            while (fileScanner.hasNext()) {
+                String line = fileScanner.nextLine();
+                String[] parts = line.split(" \\| ");
+
+                String type = parts[0];
+                boolean isDone = parts[1].equals("done");
+                String description = parts[2];
+
+                Task task = null;
+
+                switch (type) {
+                case "Todo":
+                    task = new Todo(description);
+                    break;
+                case "Deadline":
+                    String by = parts[3];
+                    task = new Deadline(description, by);
+                    break;
+                case "Event":
+                    String from = parts[3];
+                    String to = parts[4];
+                    task = new Event(description, from, to);
+                    break;
+                }
+
+                if (task != null) {
+                    if(isDone) {
+                        task.markAsDone();
+                    }
+                    tasks.add(task);
+                }
+            }
+            fileScanner.close();
+        } catch (Exception e) {
+            System.out.println("Error loading tasks: " + e.getMessage());
+        }
+    }
+
+    private static void saveTasksToFile() {
+        try {
+            File directory = new File("./data");
+            if (!directory.exists()) {
+                boolean isCreated = directory.mkdirs();
+                if (!isCreated) {
+                    System.out.println("Error: Failed to create data directory.");
+                }
+            }
+
+            FileWriter writer = new FileWriter("./data/spike.txt");
+            for (Task t: tasks) {
+                writer.write(t.toFileFormat() + System.lineSeparator());
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Error saving tasks to file " + e.getMessage());
+        }
+    }
+
     private static void addEvent(String line) throws SpikeException {
         int fromIndex = line.indexOf("/from");
         int toIndex = line.indexOf("/to");
@@ -97,6 +168,7 @@ public class Spike {
         tasks.add(newTask);
 
         printTaskWithTaskCount(newTask);
+        saveTasksToFile();
     }
 
     private static void addDeadline(String line) throws SpikeException {
@@ -117,6 +189,7 @@ public class Spike {
         tasks.add(newTask);
 
         printTaskWithTaskCount(newTask);
+        saveTasksToFile();
     }
 
     private static void addTodo(String line) throws SpikeException {
@@ -129,6 +202,7 @@ public class Spike {
         tasks.add(newTask);
 
         printTaskWithTaskCount(newTask);
+        saveTasksToFile();
     }
 
     private static void unmarkTask(String line) throws SpikeException {
@@ -143,6 +217,8 @@ public class Spike {
 
         System.out.println("   OK, I've marked this task as not done yet:");
         System.out.println("   " + tasks.get(index));
+
+        saveTasksToFile();
     }
 
     private static void markTask(String line) throws SpikeException {
@@ -157,16 +233,23 @@ public class Spike {
 
         System.out.println("   Nice! I've marked this task as done:");
         System.out.println("   " + tasks.get(index));
+
+        saveTasksToFile();
     }
 
     private static void listTasks() {
-        System.out.println("   Here are the tasks in your list: ");
-
-        int count = 1;
-        for (Task t: tasks) {
-            System.out.println("   " + count + "." + t);
-            count++;
+        if (tasks.isEmpty()) {
+            System.out.println("   You have no tasks.");
+        } else {
+            System.out.println("   Here are the tasks in your list: ");
+            int count = 1;
+            for (Task t: tasks) {
+                System.out.println("   " + count + "." + t);
+                count++;
+            }
         }
+
+        saveTasksToFile();
     }
 
     private static void printExitMessage() {

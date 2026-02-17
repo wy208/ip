@@ -1,5 +1,8 @@
-$ Class files
+# Class files
 *.class
+
+# Data file
+/data
 
 # IDEA files
 /.idea/

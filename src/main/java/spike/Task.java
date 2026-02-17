@@ -11,9 +11,9 @@ public class Task {
 
     public String getStatusIcon() {
         if (!isDone) {
-            return(" ");
+            return (" ");
         }
-        return("X");
+        return ("X");
     }
 
     public void markAsDone() {
@@ -26,6 +26,16 @@ public class Task {
 
     @Override
     public String toString() {
-        return("[" + getStatusIcon() + "] " + description);
+        return ("[" + getStatusIcon() + "] " + description);
     }
+
+    public String toFileFormat() {
+        String status = "not done";
+        if(isDone) {
+            status = "  done  ";
+        }
+
+        return String.format("| " + status + " | " + description);
+    }
+
 }
