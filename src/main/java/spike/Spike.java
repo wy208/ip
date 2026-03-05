@@ -4,8 +4,7 @@ import java.util.ArrayList;
 
 public class Spike {
 
-    private static ArrayList<Task> tasks;
-
+    private TaskList tasks;
     private Ui ui;
     private Storage storage;
 
@@ -17,7 +16,12 @@ public class Spike {
         this.ui = new Ui();
         this.storage = new Storage(filePath);
 
-        tasks = storage.loadTaskFromFile();
+        try {
+            this.tasks = new TaskList(storage.loadTaskFromFile());
+        } catch (Exception e) {
+            ui.showError("Error loading tasks. Starting with an empty list.");
+            this.tasks = new TaskList();
+        }
     }
 
     public void run() {
@@ -78,15 +82,15 @@ public class Spike {
 
             int index = Integer.parseInt(parts[1]) - 1;
 
-            if (index < 0 || index >= tasks.size()) {
+            if (index < 0 || index >= tasks.getSize()) {
                 throw new SpikeException("Task number does not exist");
             }
 
-            Task removedTask = tasks.remove(index);
+            Task removedTask = tasks.deleteTask(index);
 
             System.out.println("   Noted. I've removed this task.");
             System.out.println("   " + removedTask);
-            System.out.println("   Now you have " + tasks.size() + " tasks in the list.");
+            System.out.println("   Now you have " + tasks.getSize() + " tasks in the list.");
         } catch (NumberFormatException e) {
             throw new SpikeException("Please enter a valid number to delete.");
         }
@@ -109,10 +113,10 @@ public class Spike {
         }
 
         Task newTask = new Event(description, from, to);
-        tasks.add(newTask);
+        tasks.addTask(newTask);
 
         printTaskWithTaskCount(newTask);
-        storage.saveTasksToFile(tasks);
+        storage.saveTasksToFile(tasks.getTasks());
     }
 
     private void addDeadline(String line) throws SpikeException {
@@ -130,10 +134,10 @@ public class Spike {
         }
 
         Task newTask = new Deadline(description, by);
-        tasks.add(newTask);
+        tasks.addTask(newTask);
 
         printTaskWithTaskCount(newTask);
-        storage.saveTasksToFile(tasks);
+        storage.saveTasksToFile(tasks.getTasks());
     }
 
     private void addTodo(String line) throws SpikeException {
@@ -143,42 +147,42 @@ public class Spike {
         }
 
         Task newTask = new Todo(description);
-        tasks.add(newTask);
+        tasks.addTask(newTask);
 
         printTaskWithTaskCount(newTask);
-        storage.saveTasksToFile(tasks);
+        storage.saveTasksToFile(tasks.getTasks());
     }
 
     private void unmarkTask(String line) throws SpikeException {
         String[] parts = line.split(" ");
         int index = Integer.parseInt(parts[1]) - 1;
 
-        if (index < 0 || index >= tasks.size()) {
+        if (index < 0 || index >= tasks.getSize()) {
             throw new SpikeException("That task does not exist.");
         }
 
-        tasks.get(index).markAsNotDone();
+        tasks.getTask(index).markAsNotDone();
 
         System.out.println("   OK, I've marked this task as not done yet:");
-        System.out.println("   " + tasks.get(index));
+        System.out.println("   " + tasks.getTask(index));
 
-        storage.saveTasksToFile(tasks);
+        storage.saveTasksToFile(tasks.getTasks());
     }
 
     private void markTask(String line) throws SpikeException {
         String[] parts = line.split(" ");
         int index = Integer.parseInt(parts[1]) - 1;
 
-        if (index < 0 || index >= tasks.size()) {
+        if (index < 0 || index >= tasks.getSize()) {
             throw new SpikeException("That task does not exist.");
         }
 
-        tasks.get(index).markAsDone();
+        tasks.getTask(index).markAsDone();
 
         System.out.println("   Nice! I've marked this task as done:");
-        System.out.println("   " + tasks.get(index));
+        System.out.println("   " + tasks.getTask(index));
 
-        storage.saveTasksToFile(tasks);
+        storage.saveTasksToFile(tasks.getTasks());
     }
 
     private void listTasks() {
@@ -187,18 +191,18 @@ public class Spike {
         } else {
             System.out.println("   Here are the tasks in your list: ");
             int count = 1;
-            for (Task t: tasks) {
+            for (Task t: tasks.getTasks()) {
                 System.out.println("   " + count + "." + t);
                 count++;
             }
         }
 
-        storage.saveTasksToFile(tasks);
+        storage.saveTasksToFile(tasks.getTasks());
     }
 
-    private static void printTaskWithTaskCount(Task task) {
+    private void printTaskWithTaskCount(Task task) {
         System.out.println("   Got it. I've added this task:");
         System.out.println("   " + task);
-        System.out.println("   Now you have " + tasks.size() + " tasks in the list");
+        System.out.println("   Now you have " + tasks.getSize() + " tasks in the list");
     }
 }
