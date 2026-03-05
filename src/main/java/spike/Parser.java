@@ -18,6 +18,8 @@ public class Parser {
             return new AddCommand("event", line);
         } else if (line.startsWith("delete")) {
             return new DeleteCommand(line);
+        } else if (line.startsWith("find")) {
+            return new FindCommand(line);
         } else if(line.startsWith("help")) {
             return new HelpCommand();
         } else {
