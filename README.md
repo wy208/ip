@@ -1,8 +1,3 @@
 # Spike Chatbot
 
-   Hello from
-       ____  ____ ___ _  _______ 
-      / ___||  _ \_ _| |/ / ____|
-      \___ \| |_) | || ' /|  _|  
-      ___) |  __/| || . \| |___
-      |____/|_|  |___|_|\_\_____|
+Spike is a personal assistant chatbot that helps you keep track of various tasks like **Todos**, **Deadlines**, and **Events**. It features a fast command-line interface and automatic data saving.
