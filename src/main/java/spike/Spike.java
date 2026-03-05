@@ -44,6 +44,8 @@ public class Spike {
                     addEvent(line);
                 } else if (line.startsWith("delete")) {
                     deleteTask(line);
+                } else if(line.startsWith("help")) {
+                    ui.printHelpMessage();
                 } else {
                     throw new SpikeException("i don't understand!?");
                 }
