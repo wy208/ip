@@ -1,26 +1,27 @@
 package spike;
 
-import java.util.Scanner;
 import java.util.ArrayList;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class Spike {
 
-    private static final ArrayList<Task> tasks = new ArrayList<>();
+    private static ArrayList<Task> tasks;
+
     private Ui ui;
+    private Storage storage;
 
     public static void main(String[] args) {
-        new Spike().run();
+        new Spike("./data/spike.txt").run();
     }
 
-    public Spike() {
+    public Spike(String filePath) {
         this.ui = new Ui();
+        this.storage = new Storage(filePath);
+
+        tasks = storage.loadTaskFromFile();
     }
 
     public void run() {
-        loadTaskFromFile();
+        storage.loadTaskFromFile();
 
         ui.greetUser();
 
@@ -68,7 +69,7 @@ public class Spike {
         }
     }
 
-    private static void deleteTask(String line) throws SpikeException {
+    private void deleteTask(String line) throws SpikeException {
         try {
             String[] parts = line.split(" ");
             if (parts.length < 2) {
@@ -91,73 +92,7 @@ public class Spike {
         }
     }
 
-    private static void loadTaskFromFile() {
-        try {
-            File file = new File("./data/spike.txt");
-            if (!file.exists()) {
-                return;
-            }
-
-            Scanner fileScanner = new Scanner(file);
-            while (fileScanner.hasNext()) {
-                String line = fileScanner.nextLine();
-                String[] parts = line.split(" \\| ");
-
-                String type = parts[0];
-                boolean isDone = parts[1].equals("done");
-                String description = parts[2];
-
-                Task task = null;
-
-                switch (type) {
-                case "Todo":
-                    task = new Todo(description);
-                    break;
-                case "Deadline":
-                    String by = parts[3];
-                    task = new Deadline(description, by);
-                    break;
-                case "Event":
-                    String from = parts[3];
-                    String to = parts[4];
-                    task = new Event(description, from, to);
-                    break;
-                }
-
-                if (task != null) {
-                    if(isDone) {
-                        task.markAsDone();
-                    }
-                    tasks.add(task);
-                }
-            }
-            fileScanner.close();
-        } catch (Exception e) {
-            System.out.println("Error loading tasks: " + e.getMessage());
-        }
-    }
-
-    private static void saveTasksToFile() {
-        try {
-            File directory = new File("./data");
-            if (!directory.exists()) {
-                boolean isCreated = directory.mkdirs();
-                if (!isCreated) {
-                    System.out.println("Error: Failed to create data directory.");
-                }
-            }
-
-            FileWriter writer = new FileWriter("./data/spike.txt");
-            for (Task t: tasks) {
-                writer.write(t.toFileFormat() + System.lineSeparator());
-            }
-            writer.close();
-        } catch (IOException e) {
-            System.out.println("Error saving tasks to file " + e.getMessage());
-        }
-    }
-
-    private static void addEvent(String line) throws SpikeException {
+    private void addEvent(String line) throws SpikeException {
         int fromIndex = line.indexOf("/from");
         int toIndex = line.indexOf("/to");
 
@@ -177,10 +112,10 @@ public class Spike {
         tasks.add(newTask);
 
         printTaskWithTaskCount(newTask);
-        saveTasksToFile();
+        storage.saveTasksToFile(tasks);
     }
 
-    private static void addDeadline(String line) throws SpikeException {
+    private void addDeadline(String line) throws SpikeException {
         int byIndex = line.indexOf("/by");
 
         if (byIndex == -1) {
@@ -198,10 +133,10 @@ public class Spike {
         tasks.add(newTask);
 
         printTaskWithTaskCount(newTask);
-        saveTasksToFile();
+        storage.saveTasksToFile(tasks);
     }
 
-    private static void addTodo(String line) throws SpikeException {
+    private void addTodo(String line) throws SpikeException {
         String description = line.substring(4).trim();
         if (description.isEmpty()) {
             throw new SpikeException("The description of a todo cannot be empty.");
@@ -211,10 +146,10 @@ public class Spike {
         tasks.add(newTask);
 
         printTaskWithTaskCount(newTask);
-        saveTasksToFile();
+        storage.saveTasksToFile(tasks);
     }
 
-    private static void unmarkTask(String line) throws SpikeException {
+    private void unmarkTask(String line) throws SpikeException {
         String[] parts = line.split(" ");
         int index = Integer.parseInt(parts[1]) - 1;
 
@@ -227,10 +162,10 @@ public class Spike {
         System.out.println("   OK, I've marked this task as not done yet:");
         System.out.println("   " + tasks.get(index));
 
-        saveTasksToFile();
+        storage.saveTasksToFile(tasks);
     }
 
-    private static void markTask(String line) throws SpikeException {
+    private void markTask(String line) throws SpikeException {
         String[] parts = line.split(" ");
         int index = Integer.parseInt(parts[1]) - 1;
 
@@ -243,10 +178,10 @@ public class Spike {
         System.out.println("   Nice! I've marked this task as done:");
         System.out.println("   " + tasks.get(index));
 
-        saveTasksToFile();
+        storage.saveTasksToFile(tasks);
     }
 
-    private static void listTasks() {
+    private void listTasks() {
         if (tasks.isEmpty()) {
             System.out.println("   You have no tasks.");
         } else {
@@ -258,7 +193,7 @@ public class Spike {
             }
         }
 
-        saveTasksToFile();
+        storage.saveTasksToFile(tasks);
     }
 
     private static void printTaskWithTaskCount(Task task) {
