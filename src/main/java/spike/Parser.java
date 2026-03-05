@@ -1,6 +1,16 @@
 package spike;
 
+/**
+ * Represents the component responsible for making sense of user input.
+ */
 public class Parser {
+    /**
+     * Parses the raw user input string and returns the corresponding Command object.
+     *
+     * @param line The full command string typed by the user.
+     * @return A Command object representing the user's intent.
+     * @throws SpikeException If the user input is invalid or not recognized.
+     */
     public static Command parse(String line) throws SpikeException {
         if (line.equals("bye")) {
             return new ExitCommand();

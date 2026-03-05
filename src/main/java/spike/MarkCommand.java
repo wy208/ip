@@ -1,5 +1,8 @@
 package spike;
 
+/**
+ * Represents a command to mark a specific task as done or not done.
+ */
 public class MarkCommand extends Command {
     private String line;
     private boolean isMark;

@@ -1,5 +1,8 @@
 package spike;
 
+/**
+ * Represents a command to add a new task to the task list.
+ */
 public class AddCommand extends Command {
     private String line;
     private String type;
