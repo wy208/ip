@@ -7,29 +7,36 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Spike {
-    private static final String HORIZONTAL_LINE = "----------------------------------------------------";
 
     private static final ArrayList<Task> tasks = new ArrayList<>();
+    private Ui ui;
 
     public static void main(String[] args) {
+        new Spike().run();
+    }
+
+    public Spike() {
+        this.ui = new Ui();
+    }
+
+    public void run() {
         loadTaskFromFile();
 
-        greetUser();
+        ui.greetUser();
 
-        Scanner in = new Scanner(System.in);
         boolean isExit = false;
 
         while (!isExit) {
-            String line = in.nextLine().trim();
+            String line = ui.readCommand();
             if (line.isEmpty()) {
                 continue;
             }
-            printLine();
+            ui.printLine();
 
             try {
                 if (line.equals("bye")) {
                     isExit = true;
-                    printExitMessage();
+                    ui.printExitMessage();
                 } else if (line.equals("list")) {
                     listTasks();
                 } else if (line.startsWith("mark")) {
@@ -50,14 +57,14 @@ public class Spike {
                     throw new SpikeException("i don't understand!?");
                 }
             } catch (SpikeException e) {
-                System.out.println("   OH NO!! " + e.getMessage());
+                ui.showError(e.getMessage());
             } catch (NumberFormatException e) {
-                System.out.println("   Enter a valid number please!");
+                ui.showError("   Enter a valid number please!");
             } catch (IndexOutOfBoundsException e) {
-                System.out.println("   Task number does not exist.");
+                ui.showError("   Task number does not exist.");
             }
 
-            printLine();
+            ui.printLine();
         }
     }
 
@@ -254,24 +261,9 @@ public class Spike {
         saveTasksToFile();
     }
 
-    private static void printExitMessage() {
-        System.out.println("  " + "Bye. Hope to see you again soon!");
-    }
-
-    private static void printLine() {
-        System.out.println("  " + HORIZONTAL_LINE);
-    }
-
     private static void printTaskWithTaskCount(Task task) {
         System.out.println("   Got it. I've added this task:");
         System.out.println("   " + task);
         System.out.println("   Now you have " + tasks.size() + " tasks in the list");
-    }
-
-    private static void greetUser() {
-        System.out.println(HORIZONTAL_LINE);
-        System.out.println("Hello! I'm Spike!");
-        System.out.println("What can I do for you?");
-        System.out.println(HORIZONTAL_LINE);
     }
 }
