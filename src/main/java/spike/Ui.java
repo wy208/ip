@@ -1,8 +1,11 @@
 package spike;
 
-import java.sql.SQLOutput;
 import java.util.Scanner;
 
+/**
+ * Handles all user interactions, including reading user input
+ * and displaying messages to the console.
+ */
 public class Ui {
     private static final String HORIZONTAL_LINE = "----------------------------------------------------";
     private Scanner in;
@@ -11,6 +14,11 @@ public class Ui {
         this.in = new Scanner(System.in);
     }
 
+    /**
+     * Reads the next line of input from the user.
+     *
+     * @return The string inputted by the user.
+     */
     public String readCommand() {
         return in.nextLine().trim();
     }

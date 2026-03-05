@@ -2,9 +2,17 @@ package spike;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a command to search for tasks containing a specific keyword.
+ */
 public class FindCommand extends Command {
     private String line;
 
+    /**
+     * Constructs a new FindCommand with the specified search keyword.
+     *
+     * @param line The keyword to search for in the task list.
+     */
     public FindCommand(String line) {
         this.line = line;
     }

@@ -1,13 +1,15 @@
 package spike;
 
 import javax.swing.*;
-import java.lang.reflect.Array;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Handles the loading and saving of task data to a file on the hard disk.
+ */
 public class Storage {
     private String filePath;
 
@@ -15,6 +17,12 @@ public class Storage {
         this.filePath = filePath;
     }
 
+    /**
+     * Loads the tasks from the save file into an ArrayList.
+     *
+     * @return An ArrayList of tasks loaded from the file.
+     * @throws Exception If there is an issue reading the file.
+     */
     public ArrayList<Task> loadTaskFromFile() {
         ArrayList<Task> loadedTasks = new ArrayList<>();
         try {
@@ -63,6 +71,11 @@ public class Storage {
         return loadedTasks;
     }
 
+    /**
+     * Saves the current list of tasks to the hard disk.
+     *
+     * @param tasks The ArrayList of tasks to be saved.
+     */
     public void saveTasksToFile(ArrayList<Task> tasks) {
         try {
             File directory = new File("./data");

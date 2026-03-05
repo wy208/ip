@@ -1,9 +1,19 @@
 package spike;
 
+/**
+ * Represents a task that starts at a specific time and ends at a specific time.
+ */
 public class Event extends Task {
     protected String from;
     protected String to;
 
+    /**
+     * Constructs a new Event task with the specified description, start time, and end time.
+     *
+     * @param description The description of the event.
+     * @param from The starting date and/or time of the event.
+     * @param to The ending date and/or time of the event.
+     */
     public Event(String description, String from, String to) {
         super(description);
         this.from = from;

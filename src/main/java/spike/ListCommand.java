@@ -1,5 +1,8 @@
 package spike;
 
+/**
+ * Represents a command to display all current tasks in the task list.
+ */
 public class ListCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {

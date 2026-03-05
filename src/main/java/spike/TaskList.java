@@ -3,6 +3,10 @@ package spike;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+/**
+ * Represents the list of tasks managed by the application.
+ * Contains operations to add, delete, retrieve, and search for tasks.
+ */
 public class TaskList {
     private ArrayList<Task> tasks;
 
@@ -14,10 +18,21 @@ public class TaskList {
         this.tasks = tasks;
     }
 
+    /**
+     * Adds a new task to the task list.
+     *
+     * @param task The task to be added.
+     */
     public void addTask(Task task) {
         tasks.add(task);
     }
 
+    /**
+     * Deletes a task from the task list based on its index.
+     *
+     * @param index The 0-based index of the task to delete.
+     * @return The deleted task.
+     */
     public Task deleteTask(int index) {
         return tasks.remove(index);
     }

@@ -1,7 +1,10 @@
 package spike;
 
-import java.util.ArrayList;
-
+/**
+ * The main entry point for Spike chatbot.
+ * Initialises user interface, storage and task list components.
+ * Runs the main interaction loop
+*/
 public class Spike {
 
     private TaskList tasks;
