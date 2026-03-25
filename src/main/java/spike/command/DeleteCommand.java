@@ -35,6 +35,8 @@ public class DeleteCommand extends Command {
             System.out.println("   Noted. I've removed this task.");
             System.out.println("   " + removedTask);
             System.out.println("   Now you have " + tasks.getSize() + " tasks in the list.");
+
+            storage.saveTasksToFile(tasks.getTasks());
         } catch (NumberFormatException e) {
             throw new SpikeException("Please enter a valid number to delete.");
         }
