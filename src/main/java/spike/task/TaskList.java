@@ -1,4 +1,4 @@
-package spike;
+package spike.task;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;

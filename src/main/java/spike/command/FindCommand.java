@@ -1,4 +1,10 @@
-package spike;
+package spike.command;
+
+import spike.exception.SpikeException;
+import spike.storage.Storage;
+import spike.task.TaskList;
+import spike.ui.Ui;
+import spike.task.Task;
 
 import java.util.ArrayList;
 
@@ -18,7 +24,7 @@ public class FindCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) throws SpikeException{
+    public void execute(TaskList tasks, Ui ui, Storage storage) throws SpikeException {
         String keyword = line.substring(4).trim();
 
         if (keyword.isEmpty()) {

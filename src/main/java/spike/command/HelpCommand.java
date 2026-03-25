@@ -1,4 +1,8 @@
-package spike;
+package spike.command;
+
+import spike.storage.Storage;
+import spike.task.TaskList;
+import spike.ui.Ui;
 
 /**
  * Represents a command to display all available commands to users

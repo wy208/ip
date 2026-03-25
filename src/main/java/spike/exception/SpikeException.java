@@ -1,4 +1,4 @@
-package spike;
+package spike.exception;
 
 /**
  * Represents exceptions specific to the Spike application.

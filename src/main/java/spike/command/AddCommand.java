@@ -1,4 +1,13 @@
-package spike;
+package spike.command;
+
+import spike.exception.SpikeException;
+import spike.storage.Storage;
+import spike.task.TaskList;
+import spike.ui.Ui;
+import spike.task.Deadline;
+import spike.task.Event;
+import spike.task.Task;
+import spike.task.Todo;
 
 /**
  * Represents a command to add a new task to the task list.

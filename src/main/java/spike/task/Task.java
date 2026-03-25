@@ -1,4 +1,4 @@
-package spike;
+package spike.task;
 
 /**
  * Task with a description and a completion status.
@@ -50,7 +50,7 @@ public class Task {
             status = "  done  ";
         }
 
-        return String.format("| " + status + " | " + description);
+        return String.format(" | " + status + " | " + description);
     }
 
 }

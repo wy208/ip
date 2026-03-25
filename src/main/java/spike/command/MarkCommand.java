@@ -1,4 +1,9 @@
-package spike;
+package spike.command;
+
+import spike.exception.SpikeException;
+import spike.storage.Storage;
+import spike.task.TaskList;
+import spike.ui.Ui;
 
 /**
  * Represents a command to mark a specific task as done or not done.
@@ -24,7 +29,7 @@ public class MarkCommand extends Command {
 
             if (isMark) {
                 tasks.getTask(index).markAsDone();
-                System.out.println("   OK, I've marked this task as not done yet:");
+                System.out.println("   OK, I've marked this task as done:");
             } else {
                 tasks.getTask(index).markAsNotDone();
                 System.out.println("   OK, I've marked this task as not done yet:");

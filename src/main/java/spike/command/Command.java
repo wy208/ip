@@ -1,4 +1,9 @@
-package spike;
+package spike.command;
+
+import spike.exception.SpikeException;
+import spike.storage.Storage;
+import spike.task.TaskList;
+import spike.ui.Ui;
 
 /**
  * Represents an executable command from the user.

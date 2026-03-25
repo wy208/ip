@@ -1,6 +1,10 @@
-package spike;
+package spike.storage;
 
-import javax.swing.*;
+import spike.task.Deadline;
+import spike.task.Event;
+import spike.task.Task;
+import spike.task.Todo;
+
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.File;
@@ -36,8 +40,8 @@ public class Storage {
                 String line = fileScanner.nextLine();
                 String[] parts = line.split(" \\| ");
 
-                String type = parts[0];
-                boolean isDone = parts[1].equals("done");
+                String type = parts[0].trim();
+                boolean isDone = parts[1].trim().equals("done");
                 String description = parts[2];
 
                 Task task = null;
@@ -47,12 +51,12 @@ public class Storage {
                     task = new Todo(description);
                     break;
                 case "Deadline":
-                    String by = parts[3];
+                    String by = parts[3].trim();
                     task = new Deadline(description, by);
                     break;
                 case "Event":
-                    String from = parts[3];
-                    String to = parts[4];
+                    String from = parts[3].trim();
+                    String to = parts[4].trim();
                     task = new Event(description, from, to);
                     break;
                 }

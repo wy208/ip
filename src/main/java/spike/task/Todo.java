@@ -1,4 +1,4 @@
-package spike;
+package spike.task;
 
 /**
  * Represents a task without any specific date or time constraints.

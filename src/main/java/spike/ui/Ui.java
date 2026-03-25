@@ -1,4 +1,4 @@
-package spike;
+package spike.ui;
 
 import java.util.Scanner;
 

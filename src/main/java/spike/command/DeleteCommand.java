@@ -1,4 +1,10 @@
-package spike;
+package spike.command;
+
+import spike.exception.SpikeException;
+import spike.storage.Storage;
+import spike.task.TaskList;
+import spike.ui.Ui;
+import spike.task.Task;
 
 /**
  * Represents a command to delete a task from the task list.
@@ -11,7 +17,7 @@ public class DeleteCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) throws SpikeException{
+    public void execute(TaskList tasks, Ui ui, Storage storage) throws SpikeException {
         try {
             String[] parts = line.split(" ");
             if (parts.length < 2) {

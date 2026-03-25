@@ -1,5 +1,11 @@
 package spike;
 
+import spike.command.Command;
+import spike.exception.SpikeException;
+import spike.storage.Storage;
+import spike.task.TaskList;
+import spike.ui.Ui;
+
 /**
  * The main entry point for Spike chatbot.
  * Initialises user interface, storage and task list components.
@@ -42,7 +48,7 @@ public class Spike {
             ui.printLine();
 
             try {
-                Command c = Parser.parse(line);
+                Command c = spike.parser.Parser.parse(line);
                 c.execute(tasks, ui, storage);
                 isExit = c.isExit();
 

@@ -1,4 +1,7 @@
-package spike;
+package spike.parser;
+
+import spike.command.*;
+import spike.exception.SpikeException;
 
 /**
  * Represents the component responsible for making sense of user input.
@@ -12,25 +15,29 @@ public class Parser {
      * @throws SpikeException If the user input is invalid or not recognized.
      */
     public static Command parse(String line) throws SpikeException {
-        if (line.equals("bye")) {
+
+        String[] parts = line.split(" ", 2);
+        String commandWord = parts[0];
+
+        if (commandWord.equals("bye")) {
             return new ExitCommand();
-        } else if (line.equals("list")) {
+        } else if (commandWord.equals("list")) {
             return new ListCommand();
-        } else if (line.startsWith("mark")) {
+        } else if (commandWord.equals("mark")) {
             return new MarkCommand(line, true);
-        } else if (line.startsWith("unmark")) {
+        } else if (commandWord.equals("unmark")) {
             return new MarkCommand(line, false);
-        } else if (line.startsWith("todo")) {
+        } else if (commandWord.equals("todo")) {
             return new AddCommand("todo", line);
-        } else if (line.startsWith("deadline")) {
+        } else if (commandWord.equals("deadline")) {
             return new AddCommand("deadline", line);
-        } else if (line.startsWith("event")) {
+        } else if (commandWord.equals("event")) {
             return new AddCommand("event", line);
-        } else if (line.startsWith("delete")) {
+        } else if (commandWord.equals("delete")) {
             return new DeleteCommand(line);
-        } else if (line.startsWith("find")) {
+        } else if (commandWord.equals("find")) {
             return new FindCommand(line);
-        } else if(line.startsWith("help")) {
+        } else if(commandWord.equals("help")) {
             return new HelpCommand();
         } else {
             throw new SpikeException("i don't understand!?");
