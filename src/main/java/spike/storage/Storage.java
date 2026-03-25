@@ -61,12 +61,12 @@ public class Storage {
             task = new Todo(description);
             break;
         case "Deadline":
-            String by = parts[3].trim();
+            String by = parts[3].replace("by:", "").trim();
             task = new Deadline(description, by);
             break;
         case "Event":
-            String from = parts[3].trim();
-            String to = parts[4].trim();
+            String from = parts[3].replace("from:", "").trim();
+            String to = parts[4].replace("to:", "").trim();
             task = new Event(description, from, to);
             break;
         }
