@@ -22,6 +22,11 @@ public class Deadline extends Task {
         return("[D]" + super.toString() + " (by: " + by + ")");
     }
 
+    /**
+     * Gives the file format in which will appear in txt file.
+     *
+     * @return String of formatted line.
+     */
     @Override
     public String toFileFormat() {
         return "Deadline " + super.toFileFormat() + " | " + by;

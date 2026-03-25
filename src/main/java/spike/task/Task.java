@@ -44,6 +44,11 @@ public class Task {
         return ("[" + getStatusIcon() + "] " + description);
     }
 
+    /**
+     * Gives the file format in which will appear in txt file.
+     *
+     * @return String of formatted line.
+     */
     public String toFileFormat() {
         String status = "not done";
         if(isDone) {

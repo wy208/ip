@@ -25,6 +25,11 @@ public class Event extends Task {
         return("[E]" + super.toString() + " (from: " + from + " to: " + to + ")");
     }
 
+    /**
+     * Gives the file format in which will appear in txt file.
+     *
+     * @return String of formatted line.
+     */
     @Override
     public String toFileFormat() {
         return "Event    " + super.toFileFormat() + " | from: " + from + " | to: " + to;

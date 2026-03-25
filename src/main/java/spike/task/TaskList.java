@@ -53,6 +53,12 @@ public class TaskList {
         return tasks.isEmpty();
     }
 
+    /**
+     * Allows users to find a task within an ArrayList
+     *
+     * @param keyword The word that we are finding
+     * @return An ArrayList of tasks containing keyword
+     */
     public ArrayList<Task> findTasks(String keyword) {
         return tasks.stream()
                 .filter(task -> task.toString().contains(keyword))

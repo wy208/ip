@@ -37,42 +37,46 @@ public class Storage {
 
             Scanner fileScanner = new Scanner(file);
             while (fileScanner.hasNext()) {
-                String line = fileScanner.nextLine();
-                String[] parts = line.split(" \\| ");
-
-                String type = parts[0].trim();
-                boolean isDone = parts[1].trim().equals("done");
-                String description = parts[2];
-
-                Task task = null;
-
-                switch (type) {
-                case "Todo":
-                    task = new Todo(description);
-                    break;
-                case "Deadline":
-                    String by = parts[3].trim();
-                    task = new Deadline(description, by);
-                    break;
-                case "Event":
-                    String from = parts[3].trim();
-                    String to = parts[4].trim();
-                    task = new Event(description, from, to);
-                    break;
-                }
-
-                if (task != null) {
-                    if(isDone) {
-                        task.markAsDone();
-                    }
-                    loadedTasks.add(task);
-                }
+                parseTaskFromLine(fileScanner, loadedTasks);
             }
             fileScanner.close();
         } catch (Exception e) {
             System.out.println("Error loading tasks: " + e.getMessage());
         }
         return loadedTasks;
+    }
+
+    private static void parseTaskFromLine(Scanner fileScanner, ArrayList<Task> loadedTasks) {
+        String line = fileScanner.nextLine();
+        String[] parts = line.split(" \\| ");
+
+        String type = parts[0].trim();
+        boolean isDone = parts[1].trim().equals("done");
+        String description = parts[2];
+
+        Task task = null;
+
+        switch (type) {
+        case "Todo":
+            task = new Todo(description);
+            break;
+        case "Deadline":
+            String by = parts[3].trim();
+            task = new Deadline(description, by);
+            break;
+        case "Event":
+            String from = parts[3].trim();
+            String to = parts[4].trim();
+            task = new Event(description, from, to);
+            break;
+        }
+
+        if (task != null) {
+            if(isDone) {
+                task.markAsDone();
+            }
+            loadedTasks.add(task);
+        }
     }
 
     /**
@@ -83,11 +87,9 @@ public class Storage {
     public void saveTasksToFile(ArrayList<Task> tasks) {
         try {
             File directory = new File("./data");
-            if (!directory.exists()) {
-                boolean isCreated = directory.mkdirs();
-                if (!isCreated) {
-                    System.out.println("Error: Failed to create data directory.");
-                }
+            if (!directory.exists() && !directory.mkdirs()) {
+                System.out.println("Error: Failed to create data directory.");
+                return; 
             }
 
             FileWriter writer = new FileWriter("./data/spike.txt");

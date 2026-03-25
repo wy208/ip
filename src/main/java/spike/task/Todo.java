@@ -18,6 +18,11 @@ public class Todo extends Task {
         return("[T]" + super.toString());
     }
 
+    /**
+     * Gives the file format in which will appear in txt file.
+     *
+     * @return String of formatted line.
+     */
     @Override
     public String toFileFormat() {
         return "Todo     " + super.toFileFormat();

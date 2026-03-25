@@ -23,10 +23,16 @@ public class Ui {
         return in.nextLine().trim();
     }
 
+    /**
+     * Prints a single horizontal line with line break.
+     */
     public void printLine() {
         System.out.println("   " + HORIZONTAL_LINE);
     }
 
+    /**
+     * Prints out greeting when application is started.
+     */
     public void greetUser() {
         printLine();
         System.out.println("Hello! I'm Spike!");
@@ -43,6 +49,9 @@ public class Ui {
         System.out.println("   Type 'help' for instructions.");
     }
 
+    /**
+     * Prints message that provides user with description of how to use commands.
+     */
     public void printHelpMessage() {
         System.out.println("   Here are the commands you can use:");
         System.out.println("   - todo <description> : Adds a todo task.");
